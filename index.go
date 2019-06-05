@@ -12,12 +12,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	personsInRegisterRange, err := persons.GetPersonsInRegisterDateRange("7/16/2018", "7/26/2018") //мм, чч, гг
+	personsInRegisterRange, err := persons.GetPersonsInRegisterDateRange("7/28/2018", "9/26/2018") //мм, чч, гг
 	if err != nil {
 		log.Println(err)
 	}
 
-	fmt.Println("Пользователи зарегестрированные с 7/16/2018 по 8/10/2017\n")
+	fmt.Println("Пользователи зарегестрированные с 7/28/2018 по 9/26/2017\n")
 	for _, v := range personsInRegisterRange {
 		fmt.Println(v)
 	}

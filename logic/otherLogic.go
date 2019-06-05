@@ -8,7 +8,6 @@ import (
 	"io"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -54,20 +53,26 @@ func ParseCSV(path string) (Persons, error) {
 
 //ParseStringToDate - return a time of register (time.Time)
 func ParseStringToDate(date string) (*time.Time, error) {
-	dateSlice := strings.Split(date, "/")
-	month, err := strconv.Atoi(dateSlice[0])
+	// dateSlice := strings.Split(date, "/")
+	// month, err := strconv.Atoi(dateSlice[0])
+	// if err != nil {
+	// 	return nil, errors.New("Incorrect inputing date")
+	// }
+	// day, _ := strconv.Atoi(dateSlice[1])
+	// if err != nil {
+	// 	return nil, errors.New("Incorrect inputing date")
+	// }
+	// year, _ := strconv.Atoi(dateSlice[2])
+	// if err != nil {
+	// 	return nil, errors.New("Incorrect inputing date")
+	// }
+	// registerTime := time.Time{}.AddDate(year-1, month-1, day-1)
+	// return &registerTime, nil
+	layoutParseDate := "1/2/2006"
+	registerTime, err := time.Parse(layoutParseDate, date)
 	if err != nil {
 		return nil, errors.New("Incorrect inputing date")
 	}
-	day, _ := strconv.Atoi(dateSlice[1])
-	if err != nil {
-		return nil, errors.New("Incorrect inputing date")
-	}
-	year, _ := strconv.Atoi(dateSlice[2])
-	if err != nil {
-		return nil, errors.New("Incorrect inputing date")
-	}
-	registerTime := time.Time{}.AddDate(year-1, month-1, day-1)
 	return &registerTime, nil
 }
 
