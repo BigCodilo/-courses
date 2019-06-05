@@ -1,16 +1,32 @@
 package main
 
 import (
+	"TechnoRelyCourses/interactionDB"
 	"TechnoRelyCourses/logic"
 	"fmt"
 	"log"
 )
 
 func main() {
+	db := interactionDB.DataBase{}
+	db.Open()
+	logic.SetDatabaseConnector(db.Connection)
+	defer func(db interactionDB.DataBase) {
+		err := db.Close()
+		if err != nil {
+			fmt.Println("Something wrong with Database")
+		}
+	}(db)
+
 	persons, err := logic.ParseCSV("csv-data/MOCK_DATA.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// for _, v := range persons {
+	// 	db.Add(v)
+	// }
+	//db.GetAllPersons()
 
 	personsInRegisterRange, err := persons.GetPersonsInRegisterDateRange("7/28/2018", "9/26/2018") //мм, чч, гг
 	if err != nil {

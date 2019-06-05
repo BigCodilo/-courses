@@ -19,7 +19,7 @@ type Person struct {
 	Email        string
 	Gender       string
 	GenderIota   Gender
-	RegisterDate *time.Time
+	RegisterDate time.Time
 	Loan         float64
 }
 
@@ -59,7 +59,7 @@ func (persons Persons) GetPersonsInRegisterDateRange(fromDate, toDate string) (P
 	rangeOfInputesDate := toParseDate.Sub(*fromParseDate) //Вычитание дат с которого и по которую искать
 	personsInRagisterRange := []Person{}
 	for _, v := range persons {
-		rangeOfPersonsDate := fromParseDate.Sub(*v.RegisterDate)                         //Вычитания даты начала регистрации и даты когда зарегестрировался пользователь
+		rangeOfPersonsDate := fromParseDate.Sub(v.RegisterDate)                          //Вычитания даты начала регистрации и даты когда зарегестрировался пользователь
 		if rangeOfPersonsDate.Hours() < 0 && rangeOfInputesDate+rangeOfPersonsDate > 0 { //Херня которую и закомментировать сложно
 			personsInRagisterRange = append(personsInRagisterRange, v)
 		}
