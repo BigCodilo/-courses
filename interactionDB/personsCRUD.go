@@ -57,24 +57,25 @@ func (db *DataBase) Update(id int, email string) error {
 	return nil
 }
 
-// func (db *DataBase) GetAllPersons() {
-// 	rows, err := db.Connection.Query("select * from Persons")
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	defer rows.Close()
-// 	persons := []logic.Person{}
+func (db *DataBase) GetAllPersons() logic.Persons {
+	rows, err := db.Connection.Query("select * from Persons")
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	persons := logic.Persons{}
 
-// 	for rows.Next() {
-// 		p := logic.Person{}
-// 		err := rows.Scan(&p.FirstName, &p.LastName, &p.ID, &p.RegisterDate, &p.Email, &p.Gender, &p.GenderIota, &p.Loan)
-// 		if err != nil {
-// 			fmt.Println(err)
-// 			continue
-// 		}
-// 		persons = append(persons, p)
-// 	}
-// }
+	for rows.Next() {
+		p := logic.Person{}
+		err := rows.Scan(&p.FirstName, &p.LastName, &p.ID, &p.RegisterDate, &p.Email, &p.Gender, &p.GenderIota, &p.Loan)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		persons = append(persons, p)
+	}
+	return persons
+}
 
 func (db *DataBase) Close() error {
 	err := db.Connection.Close()
