@@ -3,7 +3,6 @@ package logic
 
 import (
 	"bufio"
-	"database/sql"
 	"encoding/csv"
 	"errors"
 	"io"
@@ -11,12 +10,6 @@ import (
 	"strconv"
 	"time"
 )
-
-var db *sql.DB
-
-func SetDatabaseConnector(dbconn *sql.DB) {
-	db = dbconn
-}
 
 //ParseCSV - parse of CSV file with data
 func ParseCSV(path string) (Persons, error) {
