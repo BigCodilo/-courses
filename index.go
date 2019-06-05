@@ -9,7 +9,11 @@ import (
 
 func main() {
 	db := interactionDB.DataBase{}
-	db.Open()
+	err := db.Open()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	logic.SetDatabaseConnector(db.Connection)
 	defer func(db interactionDB.DataBase) {
 		err := db.Close()
