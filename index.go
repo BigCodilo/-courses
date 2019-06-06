@@ -14,7 +14,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	logic.SetDatabaseConnector(db.Connection)
 	defer func(db interactionDB.DataBase) {
 		err := db.Close()
 		if err != nil {
@@ -26,6 +25,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	//----- DATABASE ------//
 
 	// for _, v := range persons {
 	// 	db.Add(v)
