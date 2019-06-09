@@ -5,11 +5,14 @@ import (
 	"TechnoRelyCourses/logic"
 	"fmt"
 	"log"
+	"net/http"
 )
 
+var DB interactionDB.DataBase
+
 func main() {
-	db := interactionDB.DataBase{}
-	err := db.Open()
+	DB = interactionDB.DataBase{}
+	err := DB.Open()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -19,7 +22,7 @@ func main() {
 		if err != nil {
 			fmt.Println("Something wrong with Database")
 		}
-	}(db)
+	}(DB)
 
 	persons, err := logic.ParseCSV("csv-data/MOCK_DATA.csv")
 	if err != nil {
@@ -33,7 +36,7 @@ func main() {
 	// }
 	//db.GetAllPersons()
 
-	personsInRegisterRange, err := persons.GetPersonsInRegisterDateRange("7/28/2018", "9/26/2018") //мм, чч, гг
+	personsInRegisterRange, err := persons.GetPersonsInRegisterDateRange("07/28/2018", "09/26/2018") //мм, чч, гг
 	if err != nil {
 		log.Println(err)
 	}
@@ -44,8 +47,8 @@ func main() {
 	}
 
 	fmt.Println("\n\n\n-----------------------------------------------------------------\n\n\n")
-	fmt.Println("Пользователи отсортированные по Loan")
-	persons.SortOfPerson("Loan")
+	fmt.Println("Пользователи отсортированные по FirstName")
+	persons.SortOfPerson("FirstName")
 	for _, v := range persons {
 		fmt.Println(v)
 	}
@@ -62,4 +65,13 @@ func main() {
 	for _, v := range personsInLoanRange {
 		fmt.Println(v)
 	}
+
+	StartServer()
+}
+
+func StartServer() {
+	http.HandleFunc("/persons", GetPersonHandler)
+	http.HandleFunc("/add", AddPersonHandler)
+	http.HandleFunc("/delete", DeletePersonHandler)
+	http.ListenAndServe(":1234", nil)
 }

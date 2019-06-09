@@ -67,7 +67,16 @@ func (db *DataBase) GetAllPersons() logic.Persons {
 
 	for rows.Next() {
 		p := logic.Person{}
-		err := rows.Scan(&p.FirstName, &p.LastName, &p.ID, &p.RegisterDate, &p.Email, &p.Gender, &p.GenderIota, &p.Loan)
+		err := rows.Scan(
+			&p.FirstName,
+			&p.LastName,
+			&p.ID,
+			&p.RegisterDate,
+			&p.Email,
+			&p.Gender,
+			&p.GenderIota,
+			&p.Loan,
+		)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -78,6 +87,5 @@ func (db *DataBase) GetAllPersons() logic.Persons {
 }
 
 func (db *DataBase) Close() error {
-	err := db.Connection.Close()
-	return err
+	return db.Connection.Close()
 }
