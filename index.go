@@ -65,7 +65,6 @@ func main() {
 	for _, v := range personsInLoanRange {
 		fmt.Println(v)
 	}
-
 	StartServer()
 }
 
@@ -73,5 +72,6 @@ func StartServer() {
 	http.HandleFunc("/persons", GetPersonHandler)
 	http.HandleFunc("/add", AddPersonHandler)
 	http.HandleFunc("/delete", DeletePersonHandler)
+	http.HandleFunc("/update", UpdatePersonHandler)
 	http.ListenAndServe(":1234", nil)
 }

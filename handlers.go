@@ -3,8 +3,10 @@ package main
 import (
 	"TechnoRelyCourses/logic"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func GetPersonHandler(w http.ResponseWriter, r *http.Request) {
@@ -50,17 +52,20 @@ func GetPersonHandler(w http.ResponseWriter, r *http.Request) {
 func AddPersonHandler(w http.ResponseWriter, r *http.Request) {
 	personJSON := r.FormValue("person")
 	person := logic.Person{}
-	err := json.Unmarshal([]byte(personJSON), person)
+	err := json.Unmarshal([]byte(personJSON), &person)
 	if err != nil {
 		http.Error(w, "Uncorrect format", http.StatusBadRequest)
 		return
 	}
+	person.RegisterDate = time.Now()
+	logic.SetIotaGender(person)
 	err = DB.Add(person)
 	if err != nil {
 		http.Error(w, "Problem with database", 418)
 		return
 	}
-	w.Write([]byte("Person added"))
+	fmt.Println(person, "---> added")
+	w.Write([]byte("Answer from server: person added"))
 }
 
 func DeletePersonHandler(w http.ResponseWriter, r *http.Request) {
@@ -74,5 +79,28 @@ func DeletePersonHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Something wrong", 418)
 		return
 	}
+	fmt.Println("id: ", id, "---> deleted")
 	w.Write([]byte("user deleted"))
+}
+
+func UpdatePersonHandler(w http.ResponseWriter, r *http.Request) {
+	type IDPerson struct {
+		ID     int          `json:"id"`
+		Person logic.Person `json:"person"`
+	}
+
+	idPerson := IDPerson{}
+	idPersonJSONString := r.FormValue("idperson")
+	err := json.Unmarshal([]byte(idPersonJSONString), &idPerson)
+	if err != nil {
+		http.Error(w, "Something wrong", 418)
+		return
+	}
+	err = DB.Update(idPerson.ID, idPerson.Person)
+	if err != nil {
+		http.Error(w, "Something wrong", 418)
+		return
+	}
+	fmt.Println(idPerson.Person, "---> updated")
+	w.Write([]byte("update succeseful"))
 }

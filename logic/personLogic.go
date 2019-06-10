@@ -14,13 +14,13 @@ type Gender int
 
 type Person struct {
 	ID           int
-	FirstName    string
-	LastName     string
-	Email        string
-	Gender       string
+	FirstName    string `json:"name"`
+	LastName     string `json:"surname"`
+	Email        string `json:"email"`
+	Gender       string `json:"gender"`
 	GenderIota   Gender
 	RegisterDate time.Time
-	Loan         float64
+	Loan         float64 `json:"loan"`
 }
 
 const (
