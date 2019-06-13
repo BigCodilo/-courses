@@ -29,8 +29,11 @@ const (
 )
 
 //SortOfPerson sortes a slice by one of the basic types (int, string, float64) ----> (reflection, reflection, reflection)
-func (persons Persons) SortOfPerson(fieldName string) {
-	refletOfStruct := reflect.ValueOf(persons[1])              //Получение типа структуры
+func (persons Persons) SortOfPerson(fieldName string) error {
+	if len(persons) == 0 {
+		return errors.New("empty slice")
+	}
+	refletOfStruct := reflect.ValueOf(persons[0])              //Получение типа структуры
 	_, ifExist := refletOfStruct.Type().FieldByName(fieldName) //Проверка на существования поля по введенному названию
 	if ifExist {                                               //Если сущестует
 		sort.Slice(persons, func(i, j int) bool { //Начало сортировки
@@ -49,13 +52,20 @@ func (persons Persons) SortOfPerson(fieldName string) {
 			return true
 		})
 	}
+	return nil
 }
 
-//GetPersonsInRegisterDateRange - return slice of person where each of person was register in range of inputing date
+//GetInRegisterRange - return slice of person where each of person was register in range of inputing date
 // it returns error if we haven't found any persons in inpited range
-func (persons Persons) GetPersonsInRegisterDateRange(fromDate, toDate string) (Persons, error) {
-	fromParseDate, _ := ParseStringToDate(fromDate)
-	toParseDate, _ := ParseStringToDate(toDate)
+func (persons Persons) GetInRegisterRange(fromDate, toDate string) (Persons, error) {
+	fromParseDate, err := ParseStringToDate(fromDate)
+	if err != nil {
+		return nil, err
+	}
+	toParseDate, err := ParseStringToDate(toDate)
+	if err != nil {
+		return nil, err
+	}
 	rangeOfInputesDate := toParseDate.Sub(*fromParseDate) //Вычитание дат с которого и по которую искать
 	personsInRagisterRange := []Person{}
 	for _, v := range persons {
@@ -65,7 +75,7 @@ func (persons Persons) GetPersonsInRegisterDateRange(fromDate, toDate string) (P
 		}
 	}
 	if len(personsInRagisterRange) == 0 {
-		return nil, errors.New("No persons in this range")
+		return nil, errors.New("no persons in this range")
 	}
 	return personsInRagisterRange, nil
 }

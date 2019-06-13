@@ -13,16 +13,16 @@ import (
 
 //ParseCSV - parse of CSV file with data
 func ParseCSV(path string) (Persons, error) {
-	csvFile, _ := os.Open(path)
+	csvFile, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	persons := Persons{}
 	for {
 		line, err := reader.Read()
 		if err == io.EOF {
 			break
-		}
-		if err != nil {
-			return nil, err
 		}
 		registerDate, err := ParseStringToDate(line[5])
 		if err != nil {
@@ -71,7 +71,7 @@ func ParseStringToDate(date string) (*time.Time, error) {
 	layoutParseDate := "1/2/2006"
 	registerTime, err := time.Parse(layoutParseDate, date)
 	if err != nil {
-		return nil, errors.New("Incorrect inputing date")
+		return nil, errors.New("incorrect inputing date")
 	}
 	return &registerTime, nil
 }

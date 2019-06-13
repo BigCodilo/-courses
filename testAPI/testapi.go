@@ -1,11 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 )
 
 type Person struct {
@@ -24,16 +24,14 @@ func main() {
 
 func AddingTest() {
 	person := Person{
-		FirstName: "oleg",
+		FirstName: "oleg1111",
 		LastName:  "osyka",
 		Email:     "olegosyka@gmail.com",
 		Gender:    "Male",
 		Loan:      254.3,
 	}
 	personJSON, _ := json.Marshal(person)
-	resp, err := http.PostForm("http://localhost:1234/add", url.Values{
-		"person": {string(personJSON)},
-	})
+	resp, err := http.Post("http://localhost:1234/add", "application/json", bytes.NewReader(personJSON))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -42,9 +40,7 @@ func AddingTest() {
 }
 
 func DeleteTest() {
-	resp, err := http.PostForm("http://localhost:1234/delete", url.Values{
-		"id": {"110"},
-	})
+	resp, err := http.Post("http://localhost:1234/delete", "application/json", bytes.NewReader([]byte("121")))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -67,9 +63,7 @@ func UpdateTest() {
 		},
 	}
 	idPersonJSON, _ := json.Marshal(idPerson)
-	resp, err := http.PostForm("http://localhost:1234/update", url.Values{
-		"idperson": {string(idPersonJSON)},
-	})
+	resp, err := http.Post("http://localhost:1234/update", "application/json", bytes.NewReader(idPersonJSON))
 	if err != nil {
 		fmt.Println(err)
 	}

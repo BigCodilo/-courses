@@ -1,0 +1,11 @@
+INFO: 2019/06/14 01:16:26 index.go:19: connection with database opened
+INFO: 2019/06/14 01:16:26 index.go:37: trying parsed CSV file
+INFO: 2019/06/14 01:16:26 index.go:50: getted person with range from 07/28/2018 to 09/26/2018
+INFO: 2019/06/14 01:16:26 index.go:59: persons sorted by FirstName
+INFO: 2019/06/14 01:16:26 index.go:70: getted persent of Male or Female
+INFO: 2019/06/14 01:16:26 index.go:77: getted persons it LOAN range 300000:600000
+INFO: 2019/06/14 01:16:26 index.go:90: server started
+INFO: 2019/06/14 01:16:40 handlers.go:101: POST with body  {0 oleg1111 osyka olegosyka@gmail.com Male 0 2019-06-14 01:16:40.4954518 +0300 EEST m=+14.294817601 254.3} to /add unsuccessfully. #GCWOGSKFLP
+INFO: 2019/06/14 01:16:40 handlers.go:129: POST with body  121  to  /delete  unsuccessfully. #EG7YIEVUH1
+INFO: 2019/06/14 01:16:40 handlers.go:155: POST with body  {112 {0 jeka  olegosyka@gmail.comcomcom Male 0 0001-01-01 00:00:00 +0000 UTC 254.3}}  to  /update unsuccessfully. #KQDNWRWNZ5
+INFO: 2019/06/14 01:17:39 handlers.go:30: GET for /persons?name=oleg&gender=Male&fromDate=01/01/2018&toDate=10/25/2020 unsuccessfully. #VD2LYGHVFL

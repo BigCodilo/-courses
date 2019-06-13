@@ -9,13 +9,13 @@ import (
 )
 
 type DataBase struct {
-	Connection *sql.DB
+	DB *sql.DB
 }
 
 func (db *DataBase) Open() error {
 	connectionString := "user=postgres password=root dbname=TRely sslmode=disable"
 	var err error
-	db.Connection, err = sql.Open("postgres", connectionString)
+	db.DB, err = sql.Open("postgres", connectionString)
 	if err != nil {
 		return err
 	}
@@ -23,7 +23,7 @@ func (db *DataBase) Open() error {
 }
 
 func (db *DataBase) Add(person logic.Person) error {
-	_, err := db.Connection.Exec("insert into Persons (firstname, lastname, email, gender, genderiota, registerdate, loan)"+
+	_, err := db.DB.Exec("insert into Persons (firstname, lastname, email, gender, genderiota, registerdate, loan)"+
 		"values ($1, $2, $3, $4, $5, $6, $7)",
 		person.FirstName,
 		person.LastName,
@@ -40,7 +40,7 @@ func (db *DataBase) Add(person logic.Person) error {
 }
 
 func (db *DataBase) Delete(id int) error {
-	_, err := db.Connection.Exec("delete from Persons where id = $1", id)
+	_, err := db.DB.Exec("delete from Persons where id = $1", id)
 	//_, err := db.connection.Exec("delete from Persons")
 	if err != nil {
 		return err
@@ -49,7 +49,10 @@ func (db *DataBase) Delete(id int) error {
 }
 
 func (db *DataBase) Update(id int, person logic.Person) error {
-	personFromDB := db.GetPerson(id)
+	personFromDB, err := db.GetPerson(id)
+	if err != nil {
+		return err
+	}
 	if len(person.FirstName) == 0 {
 		person.FirstName = personFromDB.FirstName
 	}
@@ -62,7 +65,7 @@ func (db *DataBase) Update(id int, person logic.Person) error {
 	if person.Loan == 0.0 {
 		person.Loan = personFromDB.Loan
 	}
-	_, err := db.Connection.Exec("update Persons set firstname = $1, email = $2, gender = $3, loan = $4 where id = $5",
+	_, err = db.DB.Exec("update Persons set firstname = $1, email = $2, gender = $3, loan = $4 where id = $5",
 		person.FirstName,
 		person.Email,
 		person.Gender,
@@ -75,10 +78,10 @@ func (db *DataBase) Update(id int, person logic.Person) error {
 	return nil
 }
 
-func (db *DataBase) GetAllPersons() logic.Persons {
-	rows, err := db.Connection.Query("select * from Persons")
+func (db *DataBase) GetAllPersons() (logic.Persons, error) {
+	rows, err := db.DB.Query("select * from Persons")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer rows.Close()
 	persons := logic.Persons{}
@@ -100,13 +103,13 @@ func (db *DataBase) GetAllPersons() logic.Persons {
 		}
 		persons = append(persons, p)
 	}
-	return persons
+	return persons, nil
 }
 
-func (db *DataBase) GetPerson(id int) logic.Person {
-	rows, err := db.Connection.Query("select * from Persons where id = $1", id)
+func (db *DataBase) GetPerson(id int) (*logic.Person, error) {
+	rows, err := db.DB.Query("select * from Persons where id = $1", id)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer rows.Close()
 	person := logic.Person{}
@@ -126,9 +129,9 @@ func (db *DataBase) GetPerson(id int) logic.Person {
 			continue
 		}
 	}
-	return person
+	return &person, nil
 }
 
 func (db *DataBase) Close() error {
-	return db.Connection.Close()
+	return db.DB.Close()
 }
