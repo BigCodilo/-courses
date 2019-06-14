@@ -11,7 +11,6 @@ import (
 var DB interactionDB.DataBase
 
 func main() {
-
 	logger.SetLoggers()
 
 	DB = interactionDB.DataBase{}

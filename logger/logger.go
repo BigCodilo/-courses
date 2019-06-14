@@ -8,6 +8,7 @@ import (
 var (
 	Info  *log.Logger
 	Error *log.Logger
+	Debug *log.Logger
 )
 
 func SetLoggers() {
@@ -15,4 +16,6 @@ func SetLoggers() {
 	Info = log.New(fileInfo, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 	fileError, _ := os.OpenFile("logger/infoError.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	Error = log.New(fileError, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	fileDebug, _ := os.OpenFile("logger/infoDebug.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	Error = log.New(fileDebug, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
 }
